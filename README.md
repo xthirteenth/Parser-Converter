@@ -1,0 +1,1 @@
+Parser-Converter for searching, converting, cleaning, filtering files in a specific language. Used in automatic formation of datasets for training neural networks. With each update, the functionality increases.
