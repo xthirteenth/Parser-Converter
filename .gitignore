@@ -1,6 +1,11 @@
 *
 !.gitignore
 !README.md
-!dosc/
+!docs/
+!docs/docs.md
+!docs/tutorial.md
 !src/
+!src/Converter
+!src/Parser/
+!src/Parser/pars.py
 !requirements.txt

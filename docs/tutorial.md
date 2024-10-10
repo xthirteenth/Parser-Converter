@@ -1,0 +1,1 @@
+To use, you need to select a language for parsing, select the number of required pages and run. (errors are possible with some languages) (check free disk space before using).
