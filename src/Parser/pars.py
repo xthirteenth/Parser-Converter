@@ -4,7 +4,7 @@ import subprocess
 from subprocess import call
 
 # Your GitHub personal access token
-GITHUB_TOKEN = "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"
+GITHUB_TOKEN = ""
 
 # Function for cloning a repository into the 'repos' folder
 def clone_repo(repo_url, repo_name):
