@@ -5,7 +5,11 @@
 !docs/docs.md
 !docs/tutorial.md
 !src/
-!src/Converter
 !src/Parser/
 !src/Parser/pars.py
 !requirements.txt
+!src/Parser/converter.py
+!src/Parser/cleaner.py
+!docs/cleaner.md
+!dataset/
+!repos/

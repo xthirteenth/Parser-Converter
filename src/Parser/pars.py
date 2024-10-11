@@ -1,17 +1,28 @@
 import os
 import requests
+import subprocess
 from subprocess import call
 
-# Function for cloning a repository
+# Your GitHub personal access token
+GITHUB_TOKEN = "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"
+
+# Function for cloning a repository into the 'repos' folder
 def clone_repo(repo_url, repo_name):
-    if not os.path.exists(repo_name):
-        print(f"Clone the repository {repo_name}...")
-        call(['git', 'clone', repo_url])
+    repo_dir = os.path.join('repos', repo_name)
+    if not os.path.exists(repo_dir):
+        os.makedirs('repos', exist_ok=True)
+        print(f"Cloning the repository {repo_name} into 'repos' folder...")
+        call(['git', 'clone', repo_url, repo_dir])
+    else:
+        print(f"Repository {repo_name} already exists in 'repos' folder.")
 
 # Get a list of repository files and check if there are files in the required language
 def get_repo_contents(owner, repo, language):
     url = f"https://api.github.com/repos/{owner}/{repo}/contents"
-    response = requests.get(url)
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}"
+    }
+    response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
         files = response.json()
@@ -40,16 +51,19 @@ def search_github_repos(language, num_pages=1):
         "order": "desc",
         "per_page": 30
     }
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}"
+    }
 
     repositories = []
     for page in range(1, num_pages + 1):
         params['page'] = page
-        response = requests.get(base_url, params=params)
+        response = requests.get(base_url, params=params, headers=headers)
         if response.status_code == 200:
             data = response.json()
             repositories.extend(data['items'])
         else:
-            print(f"Error: {response.status_code}")
+            print(f"Error: {response.status_code} - {response.json().get('message')}")
             break
 
     return repositories
@@ -70,10 +84,14 @@ def main():
         
         # Check if there are files in the required language
         if get_repo_contents(owner, repo_name, language):
-            print(f"Repository {repo_name} contains code on {language}.")
+            print(f"Repository {repo_name} contains code in {language}.")
             clone_repo(repo['clone_url'], repo_name)
+
+            # Run the cleaner.py script to clean the repository
+            print(f"Cleaning the repository {repo_name}...")
+            subprocess.run(['python3', 'cleaner.py', repo_name])
         else:
-            print(f"Repository {repo_name} does not contain code on {language}.")
+            print(f"Repository {repo_name} does not contain code in {language}.")
 
 if __name__ == "__main__":
     main()
